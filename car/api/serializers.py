@@ -36,3 +36,12 @@ class CarSerializer(serializers.ModelSerializer):
 
     def get_rates_number(self, car):
         return car.rates.count()
+
+class RateSerializer(serializers.ModelSerializer):
+    
+    car_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Rate
+        fields = ('id', 'car_id', 'rate')
+
