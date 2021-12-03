@@ -8,6 +8,13 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = ('id', 'make', 'model') 
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.context.get('popular') == True:
+            self.fields['rates_number'] = serializers.SerializerMethodField()
+        else:
+            self.fields['avg_rating'] = serializers.SerializerMethodField()
+
     def validate(self, data):
         """
         Check that if the car exists in government database.
@@ -23,3 +30,9 @@ class CarSerializer(serializers.ModelSerializer):
                 return data
         
         raise serializers.ValidationError("Car not found")
+
+    def get_avg_rating(self, car):
+        return car.avg_rate()
+
+    def get_rates_number(self, car):
+        return car.rates.count()
