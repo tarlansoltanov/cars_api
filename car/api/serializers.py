@@ -45,3 +45,15 @@ class RateSerializer(serializers.ModelSerializer):
         model = Rate
         fields = ('id', 'car_id', 'rate')
 
+    def validate_car_id(self, value):
+        """ Check that car exists """
+        car = Car.objects.filter(id=value)
+        if not car.exists():
+            raise serializers.ValidationError("Car not found")
+        return value
+
+    def validate_rate(self, value):
+        """ Check that rate is between 1 and 5 """
+        if value > 5 or value < 0:
+            raise serializers.ValidationError("Rate must be between 0 and 5")
+        return value
