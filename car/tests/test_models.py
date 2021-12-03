@@ -54,6 +54,6 @@ class RateTest(TestCase):
         golf = Car.objects.filter(model='Golf').get()
         jetta = Car.objects.filter(model='Jetta').get()
         
-        self.assertEqual(passat.avg_rate(), 4.0)
+        self.assertEqual(passat.avg_rate(), 13/3)
         self.assertEqual(golf.avg_rate(), 4.0)
         self.assertEqual(jetta.avg_rate(), 0)
