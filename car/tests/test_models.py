@@ -32,6 +32,7 @@ class RateTest(TestCase):
     def setUp(self):
         test1 = Car.objects.create(make='Volkswagen', model ='Passat')
         test2 = Car.objects.create(make='Volkswagen', model ='Golf')
+        test3 = Car.objects.create(make='Volkswagen', model ='Jetta')
 
         Rate.objects.create(car=test1, rate=5)
         Rate.objects.create(car=test2, rate=4)
@@ -42,6 +43,17 @@ class RateTest(TestCase):
     def test_rate(self):
         passat = Car.objects.filter(model='Passat').get()
         golf = Car.objects.filter(model='Golf').get()
+        jetta = Car.objects.filter(model='Jetta').get()
         
         self.assertEqual(passat.rates.count(), 3)
         self.assertEqual(golf.rates.count(), 1)
+        self.assertEqual(jetta.rates.count(), 0)
+
+    def test_avg_rate(self):
+        passat = Car.objects.filter(model='Passat').get()
+        golf = Car.objects.filter(model='Golf').get()
+        jetta = Car.objects.filter(model='Jetta').get()
+        
+        self.assertEqual(passat.avg_rate(), 4.0)
+        self.assertEqual(golf.avg_rate(), 4.0)
+        self.assertEqual(jetta.avg_rate(), 0)

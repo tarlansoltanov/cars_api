@@ -23,6 +23,13 @@ class Car(models.Model):
         self.rates.create(rate=rate)
         self.save()
 
+    def avg_rate(self):
+        """Return average rate of car."""
+        rates = self.rates.all()
+        if len(rates) == 0:
+            return 0
+        return sum([i.rate for i in rates])/len(rates)
+
 
 class Rate(models.Model):
     """Model definition for Rate."""
