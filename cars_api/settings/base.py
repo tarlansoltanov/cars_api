@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     # 3rd Party
 
     # Custom Apps
+    'car.apps.CarConfig',
 
 ]
 
