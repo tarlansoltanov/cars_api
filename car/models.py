@@ -18,6 +18,18 @@ class Car(models.Model):
         """Unicode representation of Car."""
         return f"{self.make} {self.model}"
 
+    def save(self, *args, **kwargs):
+        """Overriding save method to add average rate."""
+        if self.check_car_exists():
+            raise Exception("Car already exists")
+        super().save(*args, **kwargs)
+
+    def check_car_exists(self):
+        """Check if car exists."""
+        if Car.objects.filter(make=self.make).filter(model=self.model).exists():
+            return True
+        return False
+
     def add_rate(self, rate):
         """Add rate to car."""
         self.rates.create(rate=rate)

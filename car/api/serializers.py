@@ -25,6 +25,9 @@ class CarSerializer(serializers.ModelSerializer):
         if len(results) == 0:
             raise serializers.ValidationError("Car not found")
 
+        if Car.objects.filter(make=data['make']).filter(model=data['model']).exists():
+            raise serializers.ValidationError("Car already exists")
+
         for item in results:
             if item['Make_Name'].lower() == data['make'].lower() and item['Model_Name'].lower() == data['model'].lower():
                 return data
