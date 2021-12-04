@@ -40,10 +40,11 @@ class CarSerializer(serializers.ModelSerializer):
 class RateSerializer(serializers.ModelSerializer):
     
     car_id = serializers.IntegerField(write_only=True)
+    rating = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Rate
-        fields = ('id', 'car_id', 'rate')
+        fields = ('id', 'car_id', 'rating')
 
     def validate_car_id(self, value):
         """ Check that car exists """
@@ -52,8 +53,19 @@ class RateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Car not found")
         return value
 
-    def validate_rate(self, value):
-        """ Check that rate is between 1 and 5 """
+    def validate_rating(self, value):
+        """ Check that rating is between 1 and 5 """
         if value > 5 or value < 0:
-            raise serializers.ValidationError("Rate must be between 0 and 5")
+            raise serializers.ValidationError("Rating must be between 0 and 5")
         return value
+
+    def create(self, validated_data):
+        """
+        Create a new rate for a car.
+        """
+        car_id = validated_data.get('car_id')
+        rating = validated_data.get('rating')
+
+        car = Car.objects.get(id=car_id)
+        rate = Rate.objects.create(car=car, rate=rating)
+        return rate
