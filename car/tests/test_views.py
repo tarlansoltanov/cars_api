@@ -60,7 +60,7 @@ class CarsViewsetTest(TestCase):
 
     def test_create_car(self):
         # Get API response
-        response = client.post(reverse('car-list'), {'make': 'Volkswagen', 'model': 'Golf'}, format='json')
+        response = client.post(reverse('car-list'), {'make': 'Volkswagen', 'model': 'Jetta'}, format='json')
 
         # Get data from DB
         cars = Car.objects.all()

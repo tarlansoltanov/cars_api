@@ -26,7 +26,8 @@ class Car(models.Model):
 
     def check_car_exists(self):
         """Check if car exists."""
-        if Car.objects.filter(make=self.make).filter(model=self.model).exists():
+        car = Car.objects.filter(make=self.make).filter(model=self.model)
+        if car.exists() and car.get().id != self.id:
             return True
         return False
 
