@@ -7,7 +7,21 @@ from .serializers import *
 
 class CarViewSet(viewsets.ModelViewSet):
     queryset = Car.objects.all()
-    serializer_class = CarSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'rate':
+            return RateSerializer
+        return CarSerializer        
+
+
+    @action(detail=True, methods=['post'])
+    def rate(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     @action(detail=False)
     def popular(self, request):
